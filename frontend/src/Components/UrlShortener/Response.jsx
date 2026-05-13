@@ -23,29 +23,32 @@ export default function Response({response}) {
 
   return (
     <div style={{ maxWidth: 700, margin: '40px auto', padding: '20px', textAlign: 'center' }}>
-      <h2>Your Shortened URL Created Successfully!</h2>
+      <h2 style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed, #ec4899)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: 'none' }}>Your Shortened URL Created Successfully!</h2>
       
       <div style={{ 
-        backgroundColor: '#f0f0f0', 
+        background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(6, 182, 212, 0.2))',
         padding: '20px', 
-        borderRadius: '8px',
+        borderRadius: '12px',
         marginBottom: '20px',
-        wordBreak: 'break-all'
+        wordBreak: 'break-all',
+        border: '2px solid rgba(0, 212, 255, 0.3)',
+        boxShadow: '0 0 20px rgba(124, 58, 237, 0.2)'
       }}>
-        <p><strong>Shortened URL:</strong></p>
-        <p style={{ fontSize: '16px', color: '#007bff' }}>{shortenedUrl}</p>
+        <p style={{ color: '#b0d4e8' }}><strong>Shortened URL:</strong></p>
+        <p style={{ fontSize: '16px', color: '#00d4ff', textShadow: '0 0 10px rgba(0, 212, 255, 0.4)' }}>{shortenedUrl}</p>
       </div>
 
       {qrCode && (
         <div style={{
-          backgroundColor: '#fff',
+          background: 'linear-gradient(135deg, rgba(30, 30, 60, 0.8), rgba(26, 26, 46, 0.8))',
           padding: '20px',
-          borderRadius: '8px',
+          borderRadius: '12px',
           marginBottom: '20px',
           display: 'inline-block',
-          border: '2px solid #ddd'
+          border: '2px solid rgba(0, 212, 255, 0.3)',
+          boxShadow: '0 0 20px rgba(124, 58, 237, 0.2)'
         }}>
-          <p style={{ marginTop: 0 }}><strong>QR Code</strong></p>
+          <p style={{ marginTop: 0, color: '#00d4ff', textShadow: '0 0 10px rgba(0, 212, 255, 0.3)' }}><strong>QR Code</strong></p>
           <img 
             src={qrCode} 
             alt="QR Code" 
@@ -58,15 +61,20 @@ export default function Response({response}) {
         <button 
           onClick={copyToClipboard}
           style={{
-            padding: '10px 20px',
-            backgroundColor: '#007bff',
+            padding: '12px 24px',
+            background: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
             color: 'white',
-            border: 'none',
-            borderRadius: '4px',
+            border: '2px solid rgba(0, 212, 255, 0.4)',
+            borderRadius: '8px',
             cursor: 'pointer',
             fontSize: '16px',
-            marginRight: '10px'
+            marginRight: '10px',
+            fontWeight: '700',
+            boxShadow: '0 0 15px rgba(124, 58, 237, 0.3)',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
           }}
+          onMouseEnter={(e) => e.target.style.boxShadow = '0 0 25px rgba(236, 72, 153, 0.5), 0 0 15px rgba(0, 212, 255, 0.4)'}
+          onMouseLeave={(e) => e.target.style.boxShadow = '0 0 15px rgba(124, 58, 237, 0.3)'}
         >
           Copy URL
         </button>
@@ -75,36 +83,24 @@ export default function Response({response}) {
           <button 
             onClick={downloadQRCode}
             style={{
-              padding: '10px 20px',
-              backgroundColor: '#28a745',
+              padding: '12px 24px',
+              background: 'linear-gradient(135deg, #ec4899, #06b6d4)',
               color: 'white',
-              border: 'none',
-              borderRadius: '4px',
+              border: '2px solid rgba(236, 72, 153, 0.4)',
+              borderRadius: '8px',
               cursor: 'pointer',
               fontSize: '16px',
-              marginRight: '10px'
+              marginRight: '10px',
+              fontWeight: '700',
+              boxShadow: '0 0 15px rgba(236, 72, 153, 0.3)',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
             }}
+            onMouseEnter={(e) => e.target.style.boxShadow = '0 0 25px rgba(236, 72, 153, 0.5), 0 0 15px rgba(0, 212, 255, 0.4)'}
+            onMouseLeave={(e) => e.target.style.boxShadow = '0 0 15px rgba(236, 72, 153, 0.3)'}
           >
             Download QR Code
           </button>
         )}
-
-        <a 
-          href="/"
-          style={{
-            padding: '10px 20px',
-            backgroundColor: '#6c757d',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '16px',
-            textDecoration: 'none',
-            display: 'inline-block'
-          }}
-        >
-          Create Another
-        </a>
       </div>
     </div>
   )

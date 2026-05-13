@@ -8,9 +8,11 @@ export default function MyUrls() {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('newest');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
   const [deleteModal, setDeleteModal] = useState({ opened: false, urlId: null });
   const [qrModal, setQrModal] = useState({ opened: false, qrCode: null, shortCode: null });
   const service = new Service();
+  const itemsPerPage = 10;
 
   useEffect(() => {
     fetchUserUrls();
@@ -61,6 +63,13 @@ export default function MyUrls() {
     return new Date() > new Date(expiresAt);
   };
 
+  const truncateUrl = (url) => {
+    if (url.length > 30) {
+      return url.substring(0, 30) + '...';
+    }
+    return url;
+  };
+
   const getFilteredAndSortedUrls = () => {
     let filtered = urls;
 
@@ -92,6 +101,17 @@ export default function MyUrls() {
 
   const displayUrls = getFilteredAndSortedUrls();
 
+  // Calculate pagination
+  const totalPages = Math.ceil(displayUrls.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedUrls = displayUrls.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [sortBy, filterStatus]);
+
   if (loading) {
     return <div style={{ textAlign: 'center', padding: '40px' }}>Loading your URLs...</div>;
   }
@@ -105,7 +125,7 @@ export default function MyUrls() {
     );
   }
 
-  const rows = displayUrls.map((url) => {
+  const rows = paginatedUrls.map((url) => {
     const expired = isExpired(url.expiresAt);
     return (
       <Table.Tr key={url._id}>
@@ -120,7 +140,7 @@ export default function MyUrls() {
             style={{ color: '#007bff', textDecoration: 'none' }}
             title={url.originalUrl}
           >
-            {url.originalUrl}
+            {truncateUrl(url.originalUrl)}
           </a>
         </Table.Td>
         <Table.Td>
@@ -231,8 +251,38 @@ export default function MyUrls() {
             <Table.Tbody>{rows}</Table.Tbody>
           </Table>
           
-          <div style={{ marginTop: '20px', color: '#666' }}>
-            Showing {displayUrls.length} of {urls.length} URLs
+          <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ color: '#666' }}>
+              Showing {startIndex + 1}-{Math.min(endIndex, displayUrls.length)} of {displayUrls.length} URLs
+            </div>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <Button
+                variant="default"
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </Button>
+              
+              <div style={{ 
+                padding: '8px 12px', 
+                border: '1px solid #ddd', 
+                borderRadius: '4px',
+                minWidth: '60px',
+                textAlign: 'center',
+                fontWeight: 600
+              }}>
+                Page {currentPage} of {totalPages || 1}
+              </div>
+              
+              <Button
+                variant="default"
+                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage === totalPages || totalPages === 0}
+              >
+                Next
+              </Button>
+            </div>
           </div>
         </>
       )}
